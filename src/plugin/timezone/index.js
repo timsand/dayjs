@@ -99,6 +99,8 @@ export default (o, c, d) => {
     const diff = Math.round((date - new Date(target)) / 1000 / 60)
     let ins = d(target).$set(MS, this.$ms)
       .utcOffset((-Math.round(date.getTimezoneOffset() / 15) * 15) - diff, true)
+    // prevent double-counting of utc if utcOffset added that property
+    ins.$u = false
     if (keepLocalTime) {
       const newOffset = ins.utcOffset()
       ins = ins.add(oldOffset - newOffset, MIN)
